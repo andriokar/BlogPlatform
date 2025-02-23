@@ -1,14 +1,15 @@
 package com.devtiro.blog.controllers;
 
 import com.devtiro.blog.domain.dtos.CategoryDto;
+import com.devtiro.blog.domain.dtos.CreateCategoryRequest;
 import com.devtiro.blog.domain.entities.Category;
 import com.devtiro.blog.mappers.CategoryMapper;
 import com.devtiro.blog.services.CategoryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,6 +28,17 @@ public class CategoryController {
                         .stream()
                         .map(categoryMapper::categoryToCategoryDto)
                         .toList()
+        );
+    }
+
+    @PostMapping
+    public ResponseEntity<CategoryDto> createCategory(
+            @Valid @RequestBody CreateCategoryRequest createCategoryRequest
+    ) {
+        Category categoryToCreate = categoryMapper.createCategoryRequestToCategory(createCategoryRequest);
+        return new ResponseEntity<>(
+                categoryMapper.categoryToCategoryDto(categoryService.createCategory(categoryToCreate)),
+                HttpStatus.CREATED
         );
     }
 }
