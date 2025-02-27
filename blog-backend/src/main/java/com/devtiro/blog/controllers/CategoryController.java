@@ -24,21 +24,20 @@ public class CategoryController {
 
     @GetMapping
     public ResponseEntity<List<CategoryDto>> listCategories() {
-        return ResponseEntity.ok(
-                categoryService.listCategories()
-                        .stream()
-                        .map(categoryMapper::categoryToCategoryDto)
-                        .toList()
-        );
+        List<CategoryDto> categories = categoryService.listCategories()
+                .stream().map(categoryMapper::toDto)
+                .toList();
+
+        return ResponseEntity.ok(categories);
     }
 
     @PostMapping
     public ResponseEntity<CategoryDto> createCategory(
-            @Valid @RequestBody CreateCategoryRequest createCategoryRequest
-    ) {
-        Category categoryToCreate = categoryMapper.createCategoryRequestToCategory(createCategoryRequest);
+            @Valid @RequestBody CreateCategoryRequest createCategoryRequest) {
+        Category categoryToCreate = categoryMapper.toEntity(createCategoryRequest);
+        Category savedCategory = categoryService.createCategory(categoryToCreate);
         return new ResponseEntity<>(
-                categoryMapper.categoryToCategoryDto(categoryService.createCategory(categoryToCreate)),
+                categoryMapper.toDto(savedCategory),
                 HttpStatus.CREATED
         );
     }

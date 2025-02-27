@@ -41,7 +41,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     request.setAttribute("userId", ((BlogUserDetails) userDetails).getId());
                 }
             }
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             // Do not throw exceptions, just don't authenticate the user
             log.warn("Received invalid auth token");
         }
@@ -51,7 +51,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private String extractToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
-        if(bearerToken != null && bearerToken.startsWith("Bearer ")) {
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
         return null;

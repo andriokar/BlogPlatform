@@ -12,17 +12,17 @@ import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", unmappedSourcePolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CategoryMapper {
 
-    @Mapping(target = "postCount", source = "posts", qualifiedByName = "calculatedPostCount")
-    CategoryDto categoryToCategoryDto(Category category);
+    @Mapping(target = "postCount", source = "posts", qualifiedByName = "calculatePostCount")
+    CategoryDto toDto(Category category);
 
-    Category createCategoryRequestToCategory(CreateCategoryRequest createCategoryRequest);
+    Category toEntity(CreateCategoryRequest createCategoryRequest);
 
-    @Named("calculatedPostCount")
-    default long calculatedPostCount(List<Post> posts) {
-        if (posts == null) {
+    @Named("calculatePostCount")
+    default long calculatePostCount(List<Post> posts) {
+        if (null == posts) {
             return 0;
         }
         return posts.stream()
