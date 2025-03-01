@@ -3,6 +3,7 @@ package com.devtiro.blog.services.impl;
 import com.devtiro.blog.domain.entities.Tag;
 import com.devtiro.blog.repositories.TagRepository;
 import com.devtiro.blog.services.TagService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,5 +57,11 @@ public class TagServiceImpl implements TagService {
             }
             tagRepository.deleteById(id);
         });
+    }
+
+    @Override
+    public Tag getTagById(UUID id) {
+        return tagRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Tag with id " + id + " not found"));
     }
 }
