@@ -33,5 +33,5 @@ public class PostDto {
 
     private LocalDateTime updatedAt;
 
-    private PostStatus postStatus;
+    private PostStatus status;
 }
